@@ -22,6 +22,8 @@
 
     <!-- Custom Theme Style -->
     <link href="css/custom.css" rel="stylesheet">
+    <link href="css/map.css" rel="stylesheet">
+    <link href="css/timeline.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <script type="text/javascript" src="js/ajaxFunctions.js"></script>
     
@@ -32,25 +34,22 @@
     <link href="vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
     
-       <script type="text/javascript">
-        $(document).ready(function() {
-            $('#usertableid').DataTable();
-            $('#tableLocation1').DataTable();
-            $('#tableLocation2').DataTable();
-} );
-        </script>
-        
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+<!--      <style>
+          #mapid { height:500px; }
+          </style>-->
+      
   </head>
   
   <?php
 echo "<script type='text/javascript' async>
     window.setInterval(function(){
-	getDataFrom();
+	getDataMap();
             }, 5000);
 </script>";
 ?>
 
-  <!--<body class="nav-md" onload="getDataFrom()">-->
+  <!--<body class="nav-md" onload="getDataMap()">-->
 <body class="nav-md">
     <div class="container body">
       <div class="main_container">
@@ -118,7 +117,6 @@ echo "<script type='text/javascript' async>
                         <span>Settings</span>
                       </a>
                     </li>
-                    
                     <li><a href="#"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                     </li>
                   </ul>
@@ -138,7 +136,7 @@ echo "<script type='text/javascript' async>
         <div class="right_col" role="main">
 
           <!-- top tiles -->
-          <div class="row tile_count">
+           <div class="row tile_count">
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Total Students</span>
               <div class="count">514</div>
@@ -181,51 +179,105 @@ echo "<script type='text/javascript' async>
        
 
           <div class="row">
-              <div class="x_panel">
-                 
-                  <div class="x_content">
-              <h3>Real-time table</h3>
-              <table id="usertableid" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                  <thead><tr><td>Date</td><td>Device ID</td><td>Locator ID</td><td>IP Address</td><td>RSSI</td><td>Battery</td><td>Temperature</td></tr></thead><tbody>
-                  </tbody>
-              </table>
-           
-                  </div></div>
+             
               
+<!--              <div id="mapid"></div>-->
+<div id="image-map"></div>
+
               
-              <div class="col-md-6 col-sm-6 col-xs-12">
-              <div class="x_panel tile">
-                <div class="x_title">
-                  <h2>Location 1</h2>
-                  <div class="x_content">
-                      <table id="tableLocation1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                          <thead><tr><td>Date</td><td>Device ID</td><td>Locator ID</td></thead><tbody></tbody>
-                      </table>
-           
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-                
-              </div>
-            </div>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-              <div class="x_panel tile">
-                <div class="x_title">
-                  <h2>Location 2</h2>
-                  <div class="x_content">
-                      <table id="tableLocation2" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                          <thead><tr><td>Date</td><td>Device ID</td><td>Locator ID</td></thead><tbody></tbody>
-                      </table>
-           
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-                
-              </div>
-            </div>
+             
               
           </div>
         </div>
+        
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                <div class="modal-body">
+                    <center>
+                    <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R" name="aboutme" id="aboutme" width="140" height="140" border="0" class="img-circle"></a>
+                    <h3 class="media-heading" id="student_name"></h3>
+                    <h4>Class : 4 Mentari</h4>
+                    </center>
+                    <hr>
+                    <center>
+                 <h3>Student's Last Locations</h3>
+
+<br>
+
+<ol class="timeline">
+    <li class="timeline__step">
+        <input class="timeline__step-radio" id="trigger1{{identifier}}" name="trigger{{identifier}}" type="radio">
+
+        <label class="timeline__step-label" for="trigger1{{identifier}}">
+            <span class="timeline__step-content">
+                05-12-2016 08:10:50</span>
+        </label>
+        
+        <span class="timeline__step-title">
+            School Gate</span>
+        
+        <i class="timeline__step-marker">1</i>
+    </li>
+    <li class="timeline__step">
+        <input class="timeline__step-radio" id="trigger2{{identifier}}" name="trigger{{identifier}}" type="radio">
+        
+        <label class="timeline__step-label" for="trigger2{{identifier}}">
+            <span class="timeline__step-content">
+                05-12-2016 08:40:20</span>
+        </label>
+        
+        <span class="timeline__step-title">
+            Classroom 9</span>
+
+        <i class="timeline__step-marker">2</i>
+    </li>
+    <li class="timeline__step">
+        <input class="timeline__step-radio" id="trigger3{{identifier}}" name="trigger{{identifier}}" type="radio">
+        
+        <label class="timeline__step-label" for="trigger3{{identifier}}">
+            <span class="timeline__step-content">
+                05-12-2016 09:30:17</span>
+        </label>
+        
+        <span class="timeline__step-title">
+            School canteen</span>
+        
+        <i class="timeline__step-marker">3</i>
+    </li>
+    <li class="timeline__step">
+        <input class="timeline__step-radio" id="trigger4{{identifier}}" name="trigger{{identifier}}" type="radio">
+        
+        <label class="timeline__step-label" for="trigger4{{identifier}}">
+            <span class="timeline__step-content">
+                05-12-2016 10:15:09</span>
+        </label>
+        
+        <span class="timeline__step-title">
+            Classroom 9</span>
+        
+        <i class="timeline__step-marker">4</i>
+    </li>
+</ol>
+
+<br><br>
+
+
+                    </center>
+                </div>
+                <div class="modal-footer">
+                    
+                </div>
+            </div>
+        </div>
+    
+  </div>
+</div>
         <!-- /page content -->
 
         <!-- footer content -->
@@ -279,8 +331,137 @@ echo "<script type='text/javascript' async>
 
     <!-- Custom Theme Scripts -->
     <script src="js/custom.js"></script>
- 
+
     
+      <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+ 
+<!--    <script type="text/javascript">
+            var map = L.map('mapid', {
+        maxZoom: 24,
+        minZoom: 1,
+        crs: L.CRS.Simple
+    }).setView([0, 0], 1);
+
+    map.setMaxBounds(new L.LatLngBounds([0,500], [500,0]));
+
+    var imageUrl = 'floorplan.jpg'
+    var imageBounds = [[250,0], [0,500]];
+   
+
+    L.imageOverlay(imageUrl, imageBounds).addTo(map);
+    var marker = L.marker([190, 120]).addTo(map);
+    marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+          </script>-->
+    <script type="text/javascript">
+    //source => http://codepen.io/zachdunn/pen/VvRXdP
+        // Using leaflet.js to pan and zoom a big image.
+        // See also: http://kempe.net/blog/2014/06/14/leaflet-pan-zoom-image.html
+        // Marker Pin: http://codepen.io/zachdunn/pen/wapEam
+        // create the slippy map
+        var map = L.map('image-map', {
+          minZoom: 1,
+          maxZoom: 4,
+          center: [0, 0],
+          zoom: 1,
+          crs: L.CRS.Simple,
+          attributionControl: false
+        });
+
+        L.control.attribution({
+          prefix: false
+        }).addAttribution('').addTo(map);
+        // House: http://i.imgur.com/cenqiCf.jpg
+        // Palace SVG (1280 x 806): https://dl.dropbox.com/s/yhrpnftsuis15z6/Topkapi_Palace_plan.svg
+        // dimensions of the image
+        var w = 2000 * 2,
+        h = 950 * 2,
+        url = 'images/icon/floor_plan.png';
+
+        // calculate the edges of the image, in coordinate space
+        var southWest = map.unproject([0, h], map.getMaxZoom() - 1);
+        var northEast = map.unproject([w, 0], map.getMaxZoom() - 1);
+        var bounds = new L.LatLngBounds(southWest, northEast);
+
+        // add the image overlay, 
+        // so that it covers the entire map
+        L.imageOverlay(url, bounds).addTo(map);
+
+        // tell leaflet that the map is exactly as big as the image
+        map.setMaxBounds(bounds);
+
+        // pixel coords
+        var m = {
+            x: 1300,
+            y: 300
+          };
+          
+          var n = {
+            x: 2500,
+            y: 300
+          };
+          
+          var p = {
+            x: 2500,
+            y: 2000
+          };
+          //Add marker
+        
+//        map.on('click', addMarker);
+        var addedOne = false,
+          customPin = L.divIcon({
+            className: 'location-pin',
+            html: '<img src="images/icon/wifi.png"><div class="pin"></div><div class="pulse"></div>',
+            iconSize: [30, 30],
+            iconAnchor: [18, 30]
+          });
+          
+          
+          var userOne = false,
+          userPin = L.divIcon({
+            className: 'user-pin',
+            html: '<img src="images/icon/user.png"><div class="pin2"></div>',
+            iconSize: [30, 30],
+            iconAnchor: [18, 30]
+          });
+
+        function addMarker(e) {
+          // Add marker to map at click location; add popup window
+          if (userOne) {
+            return;
+          }
+
+          var newMarker = new L.marker(e.latlng, {
+            icon: userPin
+          }).addTo(map);
+          newMarker.bindPopup("<b>New Room</b><br>Adventures await");
+          userOne = true;
+        }
+        // Lookup neighbors https://github.com/mapbox/leaflet-knn
+
+        var marker1 = L.marker(map.unproject([m.x, m.y], map.getMaxZoom()), {
+          icon: customPin
+        }).addTo(map);
+        // Add pop up for click
+        marker1.bindPopup("<b>Classroom 9 Locator</b>");
+        
+        var marker2 = L.marker(map.unproject([n.x, n.y], map.getMaxZoom()), {
+          icon: customPin
+        }).addTo(map);
+        
+        
+        var marker2 = L.marker(map.unproject([n.x, n.y], map.getMaxZoom()), {
+          icon: customPin
+        }).addTo(map);
+        // Add pop up for click
+        marker2.bindPopup("<b>Classroom 8 Locator</b>");
+        
+        
+        var marker3 = L.marker(map.unproject([p.x, p.y], map.getMaxZoom()), {
+          icon: customPin
+        }).addTo(map);
+        // Add pop up for click
+        marker3.bindPopup("<b>Hall Locator</b>");
+    </script>
   
   </body>
 </html>
